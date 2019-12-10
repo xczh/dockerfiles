@@ -1,0 +1,33 @@
+#!/bin/bash
+
+set -e
+set -o pipefail
+
+BUILD_CONTEXT=$(dirname ${DOCKERFILE_PATH})
+
+. ${BUILD_CONTEXT}/hooks/helper
+
+Log "====== [build] BEGIN ====="
+
+PrintOS
+printenv
+
+BUILD_OPTS=
+
+set -x
+
+if [ "${DOCKER_TAG}" = "__HOOKS_CPU__" ]; then
+    NEW_TAG="cpu"
+    BUILD_OPTS="${BUILD_OPTS} --build-args BASE_IMAGE=ubuntu:latest"
+elif [ "${DOCKER_TAG}" = "__HOOKS_CUDA_10.1_CUDNN_7__" ]; then
+    NEW_TAG=$(echo ${DOCKER_TAG} | sed -r 's#__HOOKS_CUDA_([0-9.]+)_CUDNN_([0-9.]+)__#nvidia-cuda\1-cudnn\2#')
+    BASE_IMAGE=$(echo ${DOCKER_TAG} | sed -r 's#__HOOKS_CUDA_([0-9.]+)_CUDNN_([0-9.]+)__#nvidia/cuda:\1-cudnn\2-devel#')
+    BUILD_OPTS="${BUILD_OPTS} --build-args BASE_IMAGE=${BASE_IMAGE}"
+else
+    # Fallback to Standard Build
+    NEW_TAG=${DOCKER_TAG}
+fi
+
+docker build -t ${DOCKER_REPO}:${NEW_TAG} ${BUILD_OPTS} ${BUILD_CONTEXT}
+
+Log "====== [build] END ====="

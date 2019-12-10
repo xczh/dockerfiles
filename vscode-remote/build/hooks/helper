@@ -1,0 +1,11 @@
+#!/bin/bash
+
+function Log() {
+    local msg="`date '+%Y/%m/%d %H:%M:%S'` $1"
+    echo ${msg}
+}
+
+function PrintOS() {
+    cat /etc/issue || true
+    cat /etc/*-release || true
+}

@@ -1,0 +1,20 @@
+#!/bin/bash
+
+BUILD_CONTEXT=$(dirname ${DOCKERFILE_PATH})
+
+. ${BUILD_CONTEXT}/hooks/helper
+
+Log "====== [post_push] BEGIN ====="
+
+PrintOS
+printenv
+
+set -x
+
+if [ "${DOCKER_TAG}" = "__HOOKS_CPU__" ]; then
+    NEW_TAG="cpu"
+    docker tag ${DOCKER_REPO}:${NEW_TAG} ${DOCKER_REPO}:latest
+    docker push ${DOCKER_REPO}:latest
+fi
+
+Log "====== [post_push] END ====="

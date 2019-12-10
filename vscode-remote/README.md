@@ -34,7 +34,7 @@ $ docker run -d --restart=unless-stopped \
 ```sh
 # 编译GPU版本镜像
 $ BASE_IMAGE="nvidia/cuda:10.1-cudnn7-devel" \
-  TAG="nvidia-cu101-cudnn7" \
+  TAG="nvidia-cuda10.1-cudnn7" \
   docker build --build-arg BASE_IMAGE=${BASE_IMAGE} -t xczh/vscode-remote:${TAG} .
 
 # 运行容器
@@ -46,7 +46,7 @@ $ docker run -d --restart=unless-stopped \
                 -v coder-vscr:/home/coder \
                 -p 2201:22 \
                 -e SSH_CODER_PASSWORD=YOUR_LONG_PASSWORD \
-                xczh/vscode-remote:nvidia-cu101-cudnn7
+                xczh/vscode-remote:nvidia-cuda10.1-cudnn7
 ```
 
 ## 本地环境设置
