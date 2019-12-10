@@ -13,9 +13,17 @@ function PrintOS() {
 function PrintEnv() {
     __SSH_PRIVATE=${SSH_PRIVATE}
     unset SSH_PRIVATE
+    __SIGNED_URLS=${SIGNED_URLS}
+    unset SIGNED_URLS
+    __DOCKERCFG=${DOCKERCFG}
+    unset DOCKERCFG
     #########
     printenv
     #########
     export SSH_PRIVATE=${__SSH_PRIVATE}
     unset __SSH_PRIVATE
+    export SIGNED_URLS=${__SIGNED_URLS}
+    unset __SIGNED_URLS
+    export DOCKERCFG=${__DOCKERCFG}
+    unset __DOCKERCFG
 }
