@@ -1,0 +1,48 @@
+#!/bin/sh
+
+set -ex
+set -o pipefail
+
+#########################
+### Dnsproxy  Section ###
+#########################
+
+DNSPROXY_DEFAULT_OPTS="-u tls://1.0.0.1:853 -u tls://1.1.1.1:853 -u tls://8.8.8.8:853"
+
+if [ -z ${DNSPROXY_OPTS} ]; then
+    DNSPROXY_PORT=${DNSPROXY_PORT:-"5353"}
+    DNSPROXY_BOOTSTRAP=${DNSPROXY_BOOTSTRAP:-"114.114.114.114:53"}
+    DNSPROXY_FALLBACK=${DNSPROXY_FALLBACK:-"114.114.114.114:53"}
+
+    DNSPROXY_OPTS="${DNSPROXY_DEFAULT_OPTS} -p ${DNSPROXY_PORT} -b ${DNSPROXY_BOOTSTRAP} -f ${DNSPROXY_FALLBACK}"
+
+    DNSPROXY_ALL_SERVERS=${DNSPROXY_ALL_SERVERS:-"1"}
+    if [ ${DNSPROXY_ALL_SERVERS} = "1" ]; then
+        DNSPROXY_OPTS="${DNSPROXY_OPTS} -s"
+    fi
+fi
+
+# Run dnsproxy for DoT and DoH
+/usr/local/bin/dnsproxy ${DNSPROXY_OPTS} &
+
+
+#######################
+### Webproc Section ###
+#######################
+
+WEBPROC_DEFAULT_OPTS=
+WEBPROC_PROGRAM=${WEBPROC_PROGRAM:-"dnsmasq --keep-in-foreground"}
+
+if [ -z ${WEBPROC_OPTS} ]; then
+    WEBPROC_CONF=${WEBPROC_CONF:-"/etc/dnsmasq.conf"}
+    WEBPROC_PORT=${WEBPROC_PORT:-"80"}
+
+    WEBPROC_OPTS="${WEBPROC_DEFAULT_OPTS} -c ${WEBPROC_CONF} -p ${WEBPROC_PORT}"
+
+    if [ -n ${WEBPROC_USER} -a -n ${WEBPROC_PASS} ]; then
+        WEBPROC_OPTS="${WEBPROC_OPTS} --user ${WEBPROC_USER} --pass ${WEBPROC_PASS}"
+    fi
+fi
+
+# Run webproc with dnsmasq
+/usr/local/bin/webproc ${WEBPROC_OPTS} -- ${WEBPROC_PROGRAM}
