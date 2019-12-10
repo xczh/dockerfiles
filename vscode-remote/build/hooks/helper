@@ -11,5 +11,11 @@ function PrintOS() {
 }
 
 function PrintEnv() {
-    printenv | grep -v "SSH_PRIVATE"
+    __SSH_PRIVATE=${SSH_PRIVATE}
+    unset SSH_PRIVATE
+    #########
+    printenv
+    #########
+    export SSH_PRIVATE=${__SSH_PRIVATE}
+    unset __SSH_PRIVATE
 }
