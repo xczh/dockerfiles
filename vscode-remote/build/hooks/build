@@ -7,22 +7,22 @@ BUILD_CONTEXT=$(dirname ${DOCKERFILE_PATH})
 
 . ${BUILD_CONTEXT}/hooks/helper
 
-Log "====== [build] BEGIN ====="
-
 PrintOS
-printenv
+PrintEnv
 
-BUILD_OPTS=
+Log "====== [build] BEGIN ====="
 
 set -x
 
+BUILD_OPTS=
+
 if [ "${DOCKER_TAG}" = "__HOOKS_CPU__" ]; then
     NEW_TAG="cpu"
-    BUILD_OPTS="${BUILD_OPTS} --build-args BASE_IMAGE=ubuntu:latest"
+    BUILD_OPTS="${BUILD_OPTS} --build-arg BASE_IMAGE=ubuntu:latest"
 elif [ "${DOCKER_TAG}" = "__HOOKS_CUDA_10.1_CUDNN_7__" ]; then
     NEW_TAG=$(echo ${DOCKER_TAG} | sed -r 's#__HOOKS_CUDA_([0-9.]+)_CUDNN_([0-9.]+)__#nvidia-cuda\1-cudnn\2#')
     BASE_IMAGE=$(echo ${DOCKER_TAG} | sed -r 's#__HOOKS_CUDA_([0-9.]+)_CUDNN_([0-9.]+)__#nvidia/cuda:\1-cudnn\2-devel#')
-    BUILD_OPTS="${BUILD_OPTS} --build-args BASE_IMAGE=${BASE_IMAGE}"
+    BUILD_OPTS="${BUILD_OPTS} --build-arg BASE_IMAGE=${BASE_IMAGE}"
 else
     # Fallback to Standard Build
     NEW_TAG=${DOCKER_TAG}

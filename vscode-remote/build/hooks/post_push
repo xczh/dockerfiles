@@ -4,10 +4,10 @@ BUILD_CONTEXT=$(dirname ${DOCKERFILE_PATH})
 
 . ${BUILD_CONTEXT}/hooks/helper
 
-Log "====== [post_push] BEGIN ====="
-
 PrintOS
-printenv
+PrintEnv
+
+Log "====== [post_push] BEGIN ====="
 
 set -x
 

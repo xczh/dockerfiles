@@ -9,3 +9,7 @@ function PrintOS() {
     cat /etc/issue || true
     cat /etc/*-release || true
 }
+
+function PrintEnv() {
+    printenv | grep -v "SSH_PRIVATE"
+}
