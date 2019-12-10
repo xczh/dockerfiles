@@ -25,4 +25,6 @@ else
     docker push ${DOCKER_REPO}:${NEW_TAG}
 fi
 
+set +x
+
 Log "====== [push] END ====="
