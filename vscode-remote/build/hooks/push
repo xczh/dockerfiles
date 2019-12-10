@@ -1,8 +1,5 @@
 #!/bin/bash
 
-set -e
-set -o pipefail
-
 BUILD_CONTEXT=$(dirname ${DOCKERFILE_PATH})
 
 . ${BUILD_CONTEXT}/hooks/helper
@@ -10,24 +7,22 @@ BUILD_CONTEXT=$(dirname ${DOCKERFILE_PATH})
 PrintOS
 PrintEnv
 
-Log "====== [build] BEGIN ====="
+Log "====== [push] BEGIN ====="
 
 set -x
 
-BUILD_OPTS=
-
 if [ "${DOCKER_TAG}" = "__HOOKS_CPU__" ]; then
     NEW_TAG="cpu"
-    BUILD_OPTS="${BUILD_OPTS} --build-arg BASE_IMAGE=ubuntu:latest"
+    docker push ${DOCKER_REPO}:${NEW_TAG}
+    docker tag ${DOCKER_REPO}:${NEW_TAG} ${DOCKER_REPO}:latest
+    docker push ${DOCKER_REPO}:latest
 elif [[ "${DOCKER_TAG}" =~ ^__HOOKS_CUDA_([0-9.]+)_CUDNN_([0-9.]+)__$ ]]; then
     NEW_TAG=$(echo ${DOCKER_TAG} | sed -r 's#__HOOKS_CUDA_([0-9.]+)_CUDNN_([0-9.]+)__#nvidia-cuda\1-cudnn\2#')
-    BASE_IMAGE=$(echo ${DOCKER_TAG} | sed -r 's#__HOOKS_CUDA_([0-9.]+)_CUDNN_([0-9.]+)__#nvidia/cuda:\1-cudnn\2-devel#')
-    BUILD_OPTS="${BUILD_OPTS} --build-arg BASE_IMAGE=${BASE_IMAGE}"
+    docker push ${DOCKER_REPO}:${NEW_TAG}
 else
     # Fallback to Standard Build
     NEW_TAG=${DOCKER_TAG}
+    docker push ${DOCKER_REPO}:${NEW_TAG}
 fi
 
-docker build -t ${DOCKER_REPO}:${NEW_TAG} ${BUILD_OPTS} ${BUILD_CONTEXT}
-
-Log "====== [build] END ====="
+Log "====== [push] END ====="
