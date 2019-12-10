@@ -1,12 +1,17 @@
 # VSCode Remote
 
+[![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/xczh/vscode-remote)](https://hub.docker.com/r/xczh/vscode-remote/tags)
+[![](https://images.microbadger.com/badges/image/xczh/vscode-remote.svg)](https://microbadger.com/images/xczh/vscode-remote)
+
 本项目为`VSCode Remote SSH`插件的配套开发环境，用于配合`VSCode`实现远程开发。
 
 默认开发环境为`Ubuntu`最新的LTS版本，同时也提供用于深度学习的包含`CUDA`和`CUDNN`的版本。
 
 提示：运行GPU版本需要`nvidia-docker`支持，参见[官方说明](https://github.com/NVIDIA/nvidia-docker)。不同`GPU`对于`CUDA`的版本支持情况不同，参见[这里](https://github.com/NVIDIA/nvidia-docker/wiki/Installation-(Native-GPU-Support)#usage)。
 
-## CPU说明
+编译说明：本项目已在DockerHub上自动编译，建议直接拉取预编译镜像运行而非手动编译，可用的Tags在[这里](https://hub.docker.com/r/xczh/vscode-remote/tags)。
+
+## CPU版本说明
 
 ```sh
 # 编译镜像
