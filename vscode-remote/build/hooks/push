@@ -5,8 +5,8 @@ BUILD_CONTEXT=$(dirname ${DOCKERFILE_PATH})
 . ${BUILD_CONTEXT}/hooks/helper
 
 PrintOS
-PrintEnv
-[[ "${COMMIT_MSG}" =~ "[vscode-remote]" ]] || exit 0
+PrintDockerHubEnv
+[[ "${COMMIT_MSG}" =~ (\[all\])|(\[vscode-remote\]) ]] || exit 0
 
 Log "====== [push] BEGIN ====="
 

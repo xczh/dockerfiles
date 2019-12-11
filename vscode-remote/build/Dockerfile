@@ -47,9 +47,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /root/.cache && \
     rm -vf /etc/ssh/ssh_host_* && \
-    mv /etc/localtime.bak /etc/localtime
-
-RUN adduser --gecos '' --disabled-password coder && \
+    mv /etc/localtime.bak /etc/localtime && \
+    adduser --gecos '' --disabled-password coder && \
     echo "coder ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/nopasswd
 
 COPY root /

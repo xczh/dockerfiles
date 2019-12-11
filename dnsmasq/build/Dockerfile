@@ -24,6 +24,6 @@ COPY --from=builder /go/bin/dnsproxy /go/bin/webproc /usr/local/bin/
 
 RUN apk add --no-cache dnsmasq-dnssec
 
-ADD run-server /usr/local/bin/
+COPY root /
 
 CMD ["/usr/local/bin/run-server"]
