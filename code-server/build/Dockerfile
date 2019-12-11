@@ -55,6 +55,8 @@ RUN rm -rf /var/lib/apt/lists/* && \
     adduser --gecos '' --disabled-password coder && \
     echo "coder ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/nopasswd
 
+COPY root /
+
 USER coder
 
 WORKDIR /home/coder
