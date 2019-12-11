@@ -1,0 +1,22 @@
+#!/bin/bash
+
+set -e
+set -o pipefail
+
+BUILD_CONTEXT=$(dirname ${DOCKERFILE_PATH})
+
+. ${BUILD_CONTEXT}/hooks/helper
+
+PrintOS
+PrintDockerHubEnv
+[[ "${COMMIT_MSG}" =~ (\[all\])|(\[dnsmasq\]) ]] || { echo 'Skipped.'; exit 0; }
+
+Log "====== [push] BEGIN ====="
+
+set -x
+
+docker push ${DOCKER_REPO}:${DOCKER_TAG}
+
+set +x
+
+Log "====== [push] END ====="
