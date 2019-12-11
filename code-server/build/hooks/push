@@ -1,0 +1,29 @@
+#!/bin/bash
+
+BUILD_CONTEXT=$(dirname ${DOCKERFILE_PATH})
+
+. ${BUILD_CONTEXT}/hooks/helper
+
+PrintOS
+PrintDockerHubEnv
+[[ "${COMMIT_MSG}" =~ (\[all\])|(\[code-server\]) ]] || { echo 'Skipped.'; exit 0; }
+
+Log "====== [push] BEGIN ====="
+
+set -x
+
+if [ "${DOCKER_TAG}" = "__HOOKS_CPU__" ]; then
+    docker push ${DOCKER_REPO}:minimal
+    docker push ${DOCKER_REPO}:latest
+elif [[ "${DOCKER_TAG}" =~ ^__HOOKS_CUDA_([0-9.]+)_CUDNN_([0-9.]+)__$ ]]; then
+    NEW_TAG=$(echo ${DOCKER_TAG} | sed -r 's#__HOOKS_CUDA_([0-9.]+)_CUDNN_([0-9.]+)__#nvidia-cuda\1-cudnn\2#')
+    docker push ${DOCKER_REPO}:${NEW_TAG}
+else
+    # Invalid DOCKER_TAG
+    Log "[FATAL] Not Implemented, Abort."
+    exit 1
+fi
+
+set +x
+
+Log "====== [push] END ====="

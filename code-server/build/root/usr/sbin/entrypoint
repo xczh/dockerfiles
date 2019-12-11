@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -ex
+set -o pipefail
+
+function Log() {
+    local msg="`date '+%Y/%m/%d %H:%M:%S'` $1"
+    echo ${msg}
+}
+
+exec "$@"
