@@ -6,7 +6,7 @@ BUILD_CONTEXT=$(dirname ${DOCKERFILE_PATH})
 
 PrintOS
 PrintDockerHubEnv
-[[ "${COMMIT_MSG}" =~ (\[all\])|(\[vscode-remote\]) ]] || exit 0
+[[ "${COMMIT_MSG}" =~ (\[all\])|(\[vscode-remote\]) ]] || { echo 'Skipped.'; exit 0; }
 
 Log "====== [push] BEGIN ====="
 
