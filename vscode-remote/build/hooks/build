@@ -9,6 +9,7 @@ BUILD_CONTEXT=$(dirname ${DOCKERFILE_PATH})
 
 PrintOS
 PrintEnv
+[[ "${COMMIT_MSG}" =~ "[vscode-remote]" ]] || exit 0
 
 Log "====== [build] BEGIN ====="
 

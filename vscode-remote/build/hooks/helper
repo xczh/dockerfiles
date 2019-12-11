@@ -6,7 +6,6 @@ function Log() {
 }
 
 function PrintOS() {
-    cat /etc/issue || true
     cat /etc/*-release || true
 }
 
