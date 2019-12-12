@@ -10,7 +10,7 @@ LABEL maintainer.name="xczh" \
       maintainer.email="xczh.me@foxmail.com" \
       description="Code-server WebIDE"
 
-ENV LANG=zh_CN.UTF-8
+ENV LANG=en_US.UTF-8
 
 COPY --from=cdr /usr/local/bin/code-server /usr/local/bin/code-server
 
@@ -42,7 +42,7 @@ RUN rm -rf /var/lib/apt/lists/* && \
     echo "Asia/Shanghai" > /etc/timezone && \
     cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime.bak && \
     locale-gen en_US.UTF-8 zh_CN.UTF-8 && \
-    update-locale LANG=zh_CN.UTF-8 && \
+    update-locale LANG=en_US.UTF-8 && \
     sed -i 's/http:\/\/archive.ubuntu.com/https:\/\/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list && \
     sed -i 's/http:\/\/security.ubuntu.com/https:\/\/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list && \
     curl -sSL -o /sbin/tini https://github.com/krallin/tini/releases/download/v0.18.0/tini && \
@@ -59,9 +59,9 @@ COPY root /
 
 USER coder
 
-WORKDIR /home/coder
+WORKDIR /home/coder/project
 
-VOLUME ["/home/coder"]
+VOLUME ["/home/coder/project"]
 
 ENV PORT=8080
 
@@ -69,4 +69,4 @@ EXPOSE 8080
 
 ENTRYPOINT ["/sbin/tini", "--", "/usr/sbin/entrypoint"]
 
-CMD "code-server --host 0.0.0.0 --port ${PORT} --auth password --user-data-dir ~/.code-user-data --disable-telemetry --locale zh-CN"
+CMD code-server --host 0.0.0.0 --port ${PORT} --auth password --user-data-dir /home/coder/.code-user-data --disable-telemetry --locale zh-CN
