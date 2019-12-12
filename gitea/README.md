@@ -12,6 +12,8 @@ $ docker run -d --restart=unless-stopped \
                 --hostname gitea \
                 -p 3000:3000 \
                 -p 3022:22 \
+                -v /etc/timezone:/etc/timezone:ro \
+                -v /etc/localtime:/etc/localtime:ro \
                 -v gitea:/data \
                 gitea/gitea
 ```
